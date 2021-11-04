@@ -31,6 +31,7 @@ const Contract = () => {
     beginUstValue: 0,
     lastUstValue: 0,
     diff: 0,
+    avg: 0,
   })
   const [list, setList] = createSignal<any>()
   const [labels, setLabels] = createSignal<string[]>([])
@@ -88,6 +89,18 @@ const Contract = () => {
     })
 
     console.log(store)
+    const ust = lp.map((v) =>
+      getActualPrice(v, list().poolResponses[params.contract])
+    )
+
+    const avg = ust
+      .filter((v) => v > 0)
+      .map((v, idx, arr) => (arr[idx + 1] || v) - v)
+
+    setStore({
+      avg:
+        Math.round((avg.reduce((ac, c) => ac + c, 0) / avg.length) * 100) / 100,
+    })
 
     setLabels(labels)
     setLP([
@@ -97,9 +110,7 @@ const Contract = () => {
         borderColor: "#3b82f6",
       },
       {
-        data: lp.map((v) =>
-          getActualPrice(v, list().poolResponses[params.contract])
-        ),
+        data: ust,
         label: "UST value",
         borderColor: "#6366f1",
       },
@@ -176,6 +187,9 @@ const Contract = () => {
                         <span>{store.diff}%</span>
                       </div>
                     </Show>
+                  </div>
+                  <div class="flex space-x-2 text-sm font-semibold text-gray-500">
+                    <p>Average between points: {store.avg} UST</p>
                   </div>
                 </div>
                 <div class="flex space-x-2">
