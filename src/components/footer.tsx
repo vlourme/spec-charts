@@ -3,23 +3,27 @@ import { Component, createSignal } from "solid-js"
 import Modal from "./Modal"
 
 const Footer: Component = () => {
-  const [donate, setDonate] = createSignal(false)
+  const [contact, setContact] = createSignal(false)
 
   return (
     <div class="w-full flex divide-x bg-gray-100 shadow-inner">
-      <Modal activator={donate()}>
+      <Modal activator={contact()}>
         <div class="shadow flex items-center w-full py-2 px-4">
-          <p class="flex-1 font-bold text-2xl">Make a donation</p>
+          <p class="flex-1 font-bold text-2xl">Contact me</p>
           <button
             class="inline-flex items-center justify-center"
-            onClick={() => setDonate(false)}
+            onClick={() => setContact(false)}
           >
             <HiOutlineX class="text-xl" />
           </button>
         </div>
         <p class="p-2">
-          This website is a small experiment, it's entirely free and it always
-          be. You can make a little donation to keep this project up.
+          Hey, I'm Victor. The creator of SpecFi Visualizer. You can contact me
+          on discord: vlourme#5498.
+          <br />
+          <br />
+          You can also support this website and its development by making a
+          small tip to the address below, thank you 😀
         </p>
         <div class="p-2">
           <label class="block text-sm text-gray-500">
@@ -41,10 +45,10 @@ const Footer: Component = () => {
       </a>
 
       <button
-        onClick={() => setDonate((v) => !v)}
+        onClick={() => setContact((v) => !v)}
         class="flex items-center hover:bg-gray-300 transition-colors px-4 py-2"
       >
-        Donate
+        Contact
       </button>
     </div>
   )
