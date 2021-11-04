@@ -1,8 +1,8 @@
 import { HiOutlineRefresh } from "solid-icons/hi"
 import { Component, createSignal, onMount, Show } from "solid-js"
-import APYChart from "../components/apy-chart"
-import Footer from "../components/footer"
-import SelectForm from "../components/select-form"
+import APYChart from "../components/APYChart"
+import Footer from "../components/Footer"
+import SelectForm from "../components/SelectForm"
 import { getContractsList } from "../lib/contract"
 
 const Home: Component = () => {

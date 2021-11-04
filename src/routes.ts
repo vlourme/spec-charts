@@ -4,11 +4,11 @@ import { lazy } from "solid-js"
 export const routes: RouteDefinition[] = [
   {
     path: "/",
-    component: lazy(() => import("./pages/home")),
+    component: lazy(() => import("./pages/Home")),
   },
   {
     path: "/contract/:contract/:address",
-    component: lazy(() => import("./pages/contract")),
+    component: lazy(() => import("./pages/Contract")),
   },
   {
     path: "**",

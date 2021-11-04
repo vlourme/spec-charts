@@ -8,8 +8,8 @@ import {
 } from "solid-icons/hi"
 import { createSignal, onMount, Show } from "solid-js"
 import { createStore } from "solid-js/store"
-import ChartView from "../components/chart"
-import Footer from "../components/footer"
+import ChartView from "../components/ChartView"
+import Footer from "../components/Footer"
 import {
   getActualPrice,
   getContractsList,
