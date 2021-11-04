@@ -3,7 +3,12 @@
 This small tool is a visualizer for [Spectrum Finance](https://terra.spec.finance) on Terra Blockchain, it allows you to:
 
 - Compare APYs of different vaults
-- See a chart of your LP-tokens and staking rewards.
+- See the evolution of the value of your LP-tokens in UST
+- See a chart of your LP-tokens and staking rewards
+
+**🚀 Future features and ideas are available in the [roadmap](https://github.com/vlourme/spec-charts/projects/1)**
+
+If you have ideas or enhancements, please open a discussion.
 
 ## How it works?
 
