@@ -21,6 +21,7 @@ import {
 const Contract = () => {
   const params = useParams()
   const [store, setStore] = createStore({
+    amount: 7,
     range: Range.Day,
     block: 0,
     apy: 0,
@@ -57,9 +58,13 @@ const Contract = () => {
     await load()
   })
 
-  const toggle = async (range: Range) => {
+  const toggle = async (amount: number, range: Range) => {
     setLabels([])
-    setStore("range", range)
+    setStore({
+      range,
+      amount,
+    })
+
     await load()
   }
 
@@ -67,7 +72,7 @@ const Contract = () => {
     const { labels, farm, spec, lp } = await getDataForAddress(
       store.block,
       store.range,
-      store.range == Range.Day ? 7 : 24,
+      store.amount,
       params.address,
       store.addr
     )
@@ -194,18 +199,27 @@ const Contract = () => {
                 </div>
                 <div class="flex space-x-2">
                   <button
-                    onClick={() => toggle(Range.Day)}
+                    onClick={() => toggle(7, Range.Day)}
                     classList={{
-                      "shadow-lg bg-orange-300": store.range == Range.Day,
+                      "shadow-lg bg-orange-300": store.amount == 7,
                     }}
                     class="border rounded-md px-2 py-0.5"
                   >
                     7d
                   </button>
                   <button
-                    onClick={() => toggle(Range.Hour)}
+                    onClick={() => toggle(3, Range.Day)}
                     classList={{
-                      "shadow-lg bg-orange-300": store.range == Range.Hour,
+                      "shadow-lg bg-orange-300": store.amount == 3,
+                    }}
+                    class="border rounded-md px-2 py-0.5"
+                  >
+                    3d
+                  </button>
+                  <button
+                    onClick={() => toggle(24, Range.Hour)}
+                    classList={{
+                      "shadow-lg bg-orange-300": store.amount == 24,
                     }}
                     class="border rounded-md px-2 py-0.5"
                   >
