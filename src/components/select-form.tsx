@@ -24,7 +24,7 @@ const SelectForm: Component<Props> = (props) => {
       onSubmit={(e) => submit(e)}
       class="w-full lg:w-lg p-4 space-y-2 rounded-md bg-white shadow-lg"
     >
-      <h1 class="text-2xl font-bold">Spectrum Finance Visualizer</h1>
+      <h1 class="text-2xl font-bold">Watch your yields growing 🚀</h1>
       <div>
         <label for="address" class="text-sm text-gray-500">
           Terra address
