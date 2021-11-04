@@ -61,7 +61,10 @@ const SelectForm: Component<Props> = (props) => {
         </select>
       </div>
       <div class="pt-4 flex justify-end">
-        <button class="px-2 py-1 rounded-md border shadow hover:bg-gray-100 transition-colors">
+        <button
+          disabled={!store.vault || !store.address}
+          class="px-2 py-1 disabled:opacity-40 rounded-md border shadow hover:bg-gray-100 transition-colors"
+        >
           Show rewards
         </button>
       </div>
