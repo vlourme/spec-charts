@@ -29,6 +29,10 @@ const Home: Component = () => {
         <div class="flex-1 flex flex-col space-y-4 max-w-7xl mx-auto items-center justify-center">
           <SelectForm contracts={contracts()} />
           <APYChart contracts={contracts()} />
+          <p class="text-sm text-gray-500">
+            No data is stored, everything displayed here is pulled from{" "}
+            <span class="border-b border-b-gray-400">lcd.terra.dev</span>.
+          </p>
         </div>
       </Show>
       <Footer />
