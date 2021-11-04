@@ -6,7 +6,7 @@ const App: Component = () => {
   const Route = useRoutes(routes)
 
   return (
-    <main class="bg-gray-50 min-h-screen h-full flex flex-col items-center subpixel-antialiased">
+    <main class="bg-gray-50 min-h-screen w-screen flex flex-col items-center subpixel-antialiased">
       <Route />
     </main>
   )

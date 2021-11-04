@@ -56,7 +56,7 @@ const ChartView: Component<Props> = (props) => {
     chart.render()
   }
 
-  return <canvas ref={assign} height={75}></canvas>
+  return <canvas ref={assign}></canvas>
 }
 
 export default ChartView

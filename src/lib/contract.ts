@@ -1,3 +1,5 @@
+import BigNumber from "bignumber.js"
+
 // Block every ~6-8 seconds (7 seconds here)
 const BLOCK_PER_HOUR = 3600 / 7
 const BLOCK_PER_DAY = BLOCK_PER_HOUR * 24
@@ -59,16 +61,24 @@ export const getDataForAddress = async (
   const farm: number[] = []
   const spec: number[] = []
 
+  const start = new Date()
+
   for (let i = 0; i < amount; i++) {
     let b: number
 
     if (range == Range.Day) {
+      const date = new Date(start)
+      date.setDate(date.getDate() - i)
+      labels.push(date.toLocaleDateString())
+
       b = Math.round(block - BLOCK_PER_DAY * i)
     } else {
+      const date = new Date(start)
+      date.setHours(date.getHours() - i)
+      labels.push(date.toLocaleTimeString())
+
       b = Math.round(block - BLOCK_PER_HOUR * i)
     }
-
-    labels.push(b.toString())
 
     const response = await fetch(`${url}?${baseQuery}&height=${b}`)
     const { result } = await response.json()
@@ -97,4 +107,22 @@ export const getLastBlock = async (): Promise<number> => {
   const { block } = await response.json()
 
   return block.header.height
+}
+
+export const getActualPrice = (bonded: number, pool: any): number => {
+  if (pool.assets[0].info.native_token) {
+    return new BigNumber(bonded)
+      .times(pool.assets[0].amount)
+      .div(pool.total_share)
+      .times(2)
+      .decimalPlaces(2)
+      .toNumber()
+  }
+
+  return new BigNumber(bonded)
+    .times(pool.assets[1].amount)
+    .div(pool.total_share)
+    .times(2)
+    .decimalPlaces(2)
+    .toNumber()
 }
