@@ -1,0 +1,11 @@
+name: 1h-cron
+on:
+  schedule:
+    - cron: "0 * * * *"
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run crawler
+        run: |
+          curl https://spec.vlour.me/api/crawler
