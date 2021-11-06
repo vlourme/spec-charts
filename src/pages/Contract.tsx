@@ -1,46 +1,34 @@
-import { ChartDataset } from "chart.js"
-import { Link, useParams } from "solid-app-router"
+import { useParams } from "solid-app-router"
 import {
-  HiOutlineArrowLeft,
   HiOutlineRefresh,
   HiOutlineTrendingDown,
   HiOutlineTrendingUp,
 } from "solid-icons/hi"
-import { createSignal, onMount, Show } from "solid-js"
-import { createStore } from "solid-js/store"
+import { onMount, Show } from "solid-js"
 import ChartView from "../components/ChartView"
 import Footer from "../components/Footer"
+import MongoAPYChart from "../components/MongoAPYChart"
+import MongoTVLChart from "../components/MongoTVLChart"
+import Navbar from "../components/Navbar"
+import { getContractsList, getLastBlock, Range } from "../lib/contract"
+import { loadMongoData } from "../store/mongo"
 import {
-  getActualPrice,
-  getContractsList,
-  getDataForAddress,
-  getLastBlock,
-  Range,
-} from "../lib/contract"
+  labels,
+  load,
+  LPData,
+  rewards,
+  setLabels,
+  setList,
+  setStore,
+  store,
+} from "./Contract.data"
 
 const Contract = () => {
   const params = useParams()
-  const [store, setStore] = createStore({
-    amount: 7,
-    range: Range.Day,
-    block: 0,
-    apy: 0,
-    dpr: 0,
-    name: "Loading vault...",
-    token: "",
-    addr: "",
-    beginUstValue: 0,
-    lastUstValue: 0,
-    diff: 0,
-    avg: 0,
-  })
-  const [list, setList] = createSignal<any>()
-  const [labels, setLabels] = createSignal<string[]>([])
-  const [LPData, setLP] = createSignal<ChartDataset<"line">[]>()
-  const [rewards, setRewards] = createSignal<ChartDataset<"line">[]>()
 
   onMount(async () => {
     const block = await getLastBlock()
+    await loadMongoData(params.contract)
 
     const list = await getContractsList()
     setStore({
@@ -55,7 +43,7 @@ const Contract = () => {
 
     setList(list)
 
-    await load()
+    await load(params.address, params.contract)
   })
 
   const toggle = async (amount: number, range: Range) => {
@@ -65,103 +53,12 @@ const Contract = () => {
       amount,
     })
 
-    await load()
-  }
-
-  const load = async () => {
-    const { labels, farm, spec, lp } = await getDataForAddress(
-      store.block,
-      store.range,
-      store.amount,
-      params.address,
-      store.addr
-    )
-
-    setStore({
-      beginUstValue: getActualPrice(
-        lp[0] || 0,
-        list().poolResponses[params.contract]
-      ),
-      lastUstValue: getActualPrice(
-        lp[lp.length - 1],
-        list().poolResponses[params.contract]
-      ),
-    })
-
-    setStore({
-      diff:
-        Math.round(diff(store.lastUstValue, store.beginUstValue) * 100) / 100,
-    })
-
-    console.log(store)
-    const ust = lp.map((v) =>
-      getActualPrice(v, list().poolResponses[params.contract])
-    )
-
-    const avg = ust
-      .filter((v) => v > 0)
-      .map((v, idx, arr) => (arr[idx + 1] || v) - v)
-
-    setStore({
-      avg:
-        Math.round((avg.reduce((ac, c) => ac + c, 0) / avg.length) * 100) / 100,
-    })
-
-    setLabels(labels)
-    setLP([
-      {
-        data: lp,
-        label: "LP Staked",
-        borderColor: "#3b82f6",
-      },
-      {
-        data: ust,
-        label: "UST value",
-        borderColor: "#6366f1",
-      },
-    ])
-    setRewards([
-      {
-        data: farm,
-        label: `${store.token} Staked`,
-        borderColor: "#f59e0b",
-      },
-      {
-        data: spec,
-        label: "SPEC Staked",
-        borderColor: "#10b981",
-      },
-    ])
-  }
-
-  const diff = (a, b) => {
-    return 100 * Math.abs((a - b) / ((a + b) / 2))
+    await load(params.address, params.contract)
   }
 
   return (
-    <div class="w-full min-h-screen flex flex-col">
-      <div class="w-full lg:flex lg:px-8 bg-white shadow">
-        <div class="flex-1 px-8 lg:px-0 flex items-center py-3 space-x-4">
-          <Link
-            class="hover:bg-gray-200 transition-colors flex items-center justify-center w-8 h-8 rounded-full"
-            href="/"
-          >
-            <HiOutlineArrowLeft class="text-black text-xl" />
-          </Link>
-          <h1 class="font-bold text-2xl">{store.name}</h1>
-        </div>
-        <div class="flex divide-x border-t lg:border-t-0">
-          <div class="px-4 py-2 lg:py-0 flex items-center justify-center">
-            DPR: {store.dpr} %
-          </div>
-          <div class="px-4 py-2 lg:py-0 flex items-center justify-center">
-            APY: {store.apy} %
-          </div>
-          <div class="px-4 py-2 lg:py-0 flex items-center justify-center">
-            Last block: {store.block}
-          </div>
-        </div>
-      </div>
+    <div class="w-full min-h-screen divide-y flex flex-col">
+      <Navbar store={store} />
 
       <div class="flex-1 flex flex-col items-center justify-center h-full">
         <Show
@@ -174,7 +71,11 @@ const Contract = () => {
           }
         >
           <section class="mx-auto max-w-7xl w-full h-full flex flex-col space-y-4 p-5">
-            <div class="flex-1 h-full p-4 space-y-2 rounded-md bg-white shadow-lg">
+            <div class="grid grid-cols-2 gap-x-4">
+              <MongoAPYChart />
+              <MongoTVLChart />
+            </div>
+            <div class="flex-1 h-full p-4 space-y-2 rounded-md bg-white border">
               <div class="flex items-center">
                 <div class="flex-1 mb-3">
                   <h1 class="text-xl font-medium">Liquidity Providing</h1>
@@ -229,7 +130,7 @@ const Contract = () => {
               </div>
               <ChartView labels={labels()} datasets={LPData()} />
             </div>
-            <div class="p-4 space-y-2 rounded-md bg-white shadow-lg">
+            <div class="p-4 space-y-2 rounded-md bg-white border">
               <h1 class="mb-3 text-xl font-medium">Staking</h1>
               <ChartView labels={labels()} datasets={rewards()} />
             </div>

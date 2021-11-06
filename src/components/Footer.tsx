@@ -6,7 +6,7 @@ const Footer: Component = () => {
   const [contact, setContact] = createSignal(false)
 
   return (
-    <div class="w-full flex divide-x bg-gray-100 shadow-inner">
+    <div class="w-full flex divide-x bg-white">
       <Modal activator={contact()}>
         <div class="shadow flex items-center w-full py-2 px-4">
           <p class="flex-1 font-bold text-2xl">Contact me</p>

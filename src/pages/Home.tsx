@@ -16,7 +16,7 @@ const Home: Component = () => {
   })
 
   return (
-    <div class="min-h-screen h-full w-full flex flex-col">
+    <div class="min-h-screen divide-y h-full w-full flex flex-col">
       <Show
         when={contracts()}
         fallback={

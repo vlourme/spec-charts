@@ -23,6 +23,7 @@
     "isomorphic-fetch": "^3.0.0",
     "mongodb": "^4.1.4",
     "node-fetch": "^3.0.0",
+    "realm-web": "^1.4.0",
     "solid-app-router": "^0.1.5",
     "solid-icons": "^0.3.2",
     "solid-js": "^1.1.1"

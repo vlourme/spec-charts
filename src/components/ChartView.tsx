@@ -2,10 +2,11 @@ import {
   CategoryScale,
   Chart,
   ChartDataset,
-  Filler,
+  Legend,
   LinearScale,
   LineController,
   LineElement,
+  LogarithmicScale,
   PointElement,
   Tooltip,
 } from "chart.js"
@@ -14,6 +15,7 @@ import { Component, createEffect } from "solid-js"
 type Props = {
   labels: string[]
   datasets: ChartDataset<"line">[]
+  options?: any
 }
 
 const ChartView: Component<Props> = (props) => {
@@ -25,17 +27,14 @@ const ChartView: Component<Props> = (props) => {
     LinearScale,
     PointElement,
     LineElement,
+    LogarithmicScale,
     Tooltip,
-    Filler
+    Legend
   )
 
   Chart.defaults.datasets.line.tension = 0.1
   Chart.defaults.datasets.line.pointBackgroundColor = "white"
-  Chart.defaults.datasets.line.fill = {
-    target: "origin",
-    above: "rgba(41, 72, 126, 0.4)",
-    below: "rgba(0, 0, 0, 0)",
-  }
+  Chart.defaults.plugins.legend.position = "bottom"
 
   createEffect(() => {
     chart.data.labels = props.labels ?? []
@@ -50,6 +49,9 @@ const ChartView: Component<Props> = (props) => {
       data: {
         labels: [],
         datasets: [],
+      },
+      options: {
+        ...props.options,
       },
     })
 
